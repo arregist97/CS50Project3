@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#compose').addEventListener('click', compose_email);
 
   //Submit email form button
-  document.querySelector('#submit').addEventListener('click', send_email);
+  document.querySelector('form').onsubmit = send_email;
 
 
   // By default, load the inbox
@@ -38,5 +38,24 @@ function load_mailbox(mailbox) {
 
 function send_email() {
   console.log("sent");
+  const recipients = document.querySelector('#compose-recipients').value;
+  const subject = document.querySelector('#compose-subject').value;
+  const body = document.querySelector('#compose-body').value;
+
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+        recipients: recipients,//need to make this a list
+        subject: subject,
+        body: body
+    })
+  })
+  .then(response => response.json())
+  .then(result => {
+      // Print result
+      console.log(result);
+  });
   return false;
+
+  load_mailbox('inbox');
 }
