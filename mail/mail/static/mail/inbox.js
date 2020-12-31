@@ -33,7 +33,17 @@ function load_mailbox(mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
+  console.log("fetching emails");
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  fetch('/emails/inbox')
+  .then(response => response.json())
+  .then(emails => {
+    // Print emails
+    console.log(emails);
+
+    // ... do something else with emails ...
+  });
 }
 
 function send_email() {
@@ -45,7 +55,7 @@ function send_email() {
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
-        recipients: recipients,//need to make this a list
+        recipients: recipients,
         subject: subject,
         body: body
     })
